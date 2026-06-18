@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mike Li · 个人主页与博客</title>
+    <meta
+      name="description"
+      content="Mike Li 的个人主页与博客：记录生活、思考与创作。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header glass">
+      <div class="container nav-wrap">
+        <a class="brand" href="#top">Mike Li</a>
+        <button class="menu-btn" id="menuBtn" aria-label="打开菜单">☰</button>
+        <nav id="nav" class="nav">
+          <a href="#about">关于</a>
+          <a href="#life">生活</a>
+          <a href="#blog">博客</a>
+          <a href="#contact">联系</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero container">
+        <p class="eyebrow">个人主页 & 生活博客</p>
+        <h1>你好，我是 Mike。</h1>
+        <p class="hero-desc">
+          在这里，我记录日常、分享思考，也沉淀做事的方法。简洁、克制、专注内容。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#blog">阅读博客</a>
+          <a class="btn btn-ghost" href="#about">了解我</a>
+        </div>
+      </section>
+
+      <section id="about" class="section container">
+        <h2>关于我</h2>
+        <p>
+          我喜欢把复杂事情讲清楚，也喜欢观察生活里那些细微但重要的变化。
+          这个站点会长期更新，记录成长、项目与灵感。
+        </p>
+      </section>
+
+      <section id="life" class="section container">
+        <h2>生活剪影</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>晨间散步</h3>
+            <p>把手机留在口袋里，专注呼吸与脚步，常常会冒出好点子。</p>
+          </article>
+          <article class="card">
+            <h3>周末阅读</h3>
+            <p>偏爱传记与非虚构写作，关注“如何行动”而不只是“知道道理”。</p>
+          </article>
+          <article class="card">
+            <h3>城市观察</h3>
+            <p>在街角与地铁里看见真实的人间温度，这些都能变成写作素材。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="blog" class="section container">
+        <div class="section-head">
+          <h2>最新博客</h2>
+          <span class="muted">持续更新中</span>
+        </div>
+        <div class="posts" id="postList"></div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="container footer-wrap">
+        <p>© <span id="year"></span> Mike Li. All rights reserved.</p>
+        <div class="socials">
+          <a href="https://github.com/ElonMikeLi" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="#" aria-disabled="true">X / 微博（待补充）</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

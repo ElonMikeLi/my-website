@@ -4,4 +4,4 @@
 
 ## 预览
 
-直接在浏览器打开 `/home/runner/work/my-website/my-website/index.html` 即可查看页面。
+进入仓库后，直接在浏览器打开 `index.html` 即可查看页面。

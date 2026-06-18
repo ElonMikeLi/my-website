@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life in Progress</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --subtext: #6e6e73;
+      --accent: #0071e3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(180deg, #0f1115, #1b1f2a);
+      color: #fff;
+      text-align: center;
+      padding: 96px 20px 72px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin: 12px auto 0;
+      max-width: 640px;
+      color: #d2d2d7;
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+    }
+    main {
+      max-width: 1100px;
+      margin: -40px auto 64px;
+      padding: 0 20px;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+    }
+    .card p,
+    .card li {
+      color: var(--subtext);
+      margin: 0;
+    }
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+    .highlight {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 34px 28px;
+    }
+    .highlight strong {
+      display: block;
+      color: var(--accent);
+      margin-top: 8px;
+      font-size: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>像科技发布会一样，记录我的生活</h1>
+    <p>这不是手机参数页，而是我的个人生活主页：学习、运动、旅行与灵感，都在这里持续更新。</p>
+  </header>
+  <main>
+    <section class="card highlight">
+      <h2>Today • 生活进度</h2>
+      <p>每天微小的进步，都值得被认真展示。</p>
+      <strong>Build your life. Day by day.</strong>
+    </section>
+    <section class="card">
+      <h2>学习实验室</h2>
+      <ul>
+        <li>阅读 30 分钟：产品设计与叙事表达</li>
+        <li>记录 1 个新知识点：前端动效与交互细节</li>
+        <li>每周复盘：把输入变成输出</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>健康模块</h2>
+      <ul>
+        <li>晨跑 5 公里，保持节奏感</li>
+        <li>力量训练 40 分钟，强化核心</li>
+        <li>睡眠目标 7 小时以上</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>旅行画廊</h2>
+      <p>在城市与自然之间切换场景，收集路上的故事，把生活过成一场长期项目。</p>
+    </section>
+    <section class="card">
+      <h2>近期里程碑</h2>
+      <ul>
+        <li>完成个人网站第一版上线</li>
+        <li>坚持记录连续 30 天</li>
+        <li>策划下一次周末短途旅行</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -27,6 +27,58 @@ body {
   background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 30%, #f0f0f3 100%);
   color: var(--text);
   min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle at center, rgba(0, 113, 227, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+.cursor-glow.hidden {
+  opacity: 0;
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 113, 227, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.particle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: rgba(0, 113, 227, 0.15);
+  border-radius: 50%;
 }
 
 a {
@@ -146,6 +198,43 @@ a {
   background: radial-gradient(ellipse at center, rgba(0, 113, 227, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
+  will-change: transform;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle at center, rgba(0, 113, 227, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero-bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero-bg-shape.shape-1 {
+  top: -15%;
+  left: 20%;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, rgba(0, 113, 227, 0.06) 0%, transparent 60%);
+}
+
+.hero-bg-shape.shape-2 {
+  bottom: -10%;
+  right: 15%;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(225deg, rgba(0, 113, 227, 0.08) 0%, transparent 60%);
 }
 
 .eyebrow {
@@ -265,6 +354,31 @@ h2 {
   border-radius: var(--radius);
   padding: 26px;
   transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before,
+.post::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 113, 227, 0.08) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover::before,
+.post:hover::before {
+  opacity: 1;
 }
 
 .card:hover,

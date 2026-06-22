@@ -92,7 +92,7 @@ function renderPosts() {
     .map(
       (post) => `
       <article class="post">
-        <div class="post-meta">${post.date} · ${post.tag}</div>
+        <div class="post-meta">${post.tag} / ${post.date}</div>
         <h3>${post.title}</h3>
         <p>${post.excerpt}</p>
       </article>
@@ -178,16 +178,41 @@ function initInteractiveEffects() {
   document.addEventListener("mouseenter", handleMouseEnter);
   window.addEventListener("scroll", handleScroll, { passive: true });
   
-  const cards = document.querySelectorAll(".card, .post");
-  cards.forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
+  // Add hover effects to gallery items
+  const galleryItems = document.querySelectorAll(".gallery-item");
+  galleryItems.forEach((item) => {
+    item.addEventListener("mousemove", (e) => {
+      const rect = item.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      card.style.setProperty("--mouse-x", `${x}px`);
-      card.style.setProperty("--mouse-y", `${y}px`);
+      item.style.setProperty("--mouse-x", `${x}px`);
+      item.style.setProperty("--mouse-y", `${y}px`);
     });
+  });
+  
+  // Scroll reveal animation
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  
+  // Observe sections
+  document.querySelectorAll('.section-split, .section-gallery').forEach(section => {
+    section.style.opacity = "0";
+    section.style.transform = "translateY(40px)";
+    section.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+    observer.observe(section);
   });
   
   console.log("Interactive effects initialized!");
@@ -222,8 +247,8 @@ class TextScramble {
     for (let i = 0; i < length; i++) {
       const from = oldText[i] || ''
       const to = newText[i] || ''
-      const start = Math.floor(Math.random() * 40)
-      const end = start + Math.floor(Math.random() * 40)
+      const start = Math.floor(Math.random() * 10)
+      const end = start + Math.floor(Math.random() * 20)
       this.queue.push({ from, to, start, end })
     }
     cancelAnimationFrame(this.frameRequest)
@@ -268,10 +293,10 @@ class TextScramble {
 
 function initTextScramble() {
   const phrases = [
-    '这里是 Joker Li.',
-    '记录生活点滴',
-    '分享思考与创作',
-    '简洁 · 克制 · 专注'
+    'MIKE LI',
+    'RECORD LIFE',
+    'THINK & CREATE',
+    'MINIMAL'
   ]
   
   const el = document.querySelector('.text')

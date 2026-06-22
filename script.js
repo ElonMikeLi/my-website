@@ -18,7 +18,7 @@ const posts = [
     date: "2026-06-05",
     tag: "随笔",
     excerpt:
-      "跑步时我意识到，很多焦虑来自"想太多做太少"。先跑出第一公里，答案往往会在路上出现。",
+      "跑步时我意识到，很多焦虑来自\"想太多做太少\"。先跑出第一公里，答案往往会在路上出现。",
   },
   {
     title: "我的个人网站第一版上线清单",
@@ -209,9 +209,16 @@ function setupSmoothScroll() {
 }
 
 function initInteractiveEffects() {
+  console.log("Initializing interactive effects...");
+  
   createParticles();
+  console.log("Particles created");
+  
   updateCursorGlow();
+  console.log("Cursor glow started");
+  
   updateParallax();
+  console.log("Parallax started");
   
   document.addEventListener("mousemove", handleMouseMove, { passive: true });
   document.addEventListener("mouseleave", handleMouseLeave);
@@ -229,11 +236,16 @@ function initInteractiveEffects() {
       card.style.setProperty("--mouse-y", `${y}px`);
     });
   });
+  
+  console.log("Interactive effects initialized!");
 }
 
-renderPosts();
-setupMenu();
-setupScrollEffect();
-setupSmoothScroll();
-setYear();
-initInteractiveEffects();
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM loaded, initializing app...");
+  renderPosts();
+  setupMenu();
+  setupScrollEffect();
+  setupSmoothScroll();
+  setYear();
+  initInteractiveEffects();
+});

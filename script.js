@@ -1,9 +1,9 @@
 const posts = [
   {
-    title: "五年的相识终究是一场空",
+    title: "不问归期，不提旧人",
     date: "2026-06-22",
     tag: "随笔",
-    excerpt: "山海再也不会相见。",
+    excerpt: "跨山越海皆陌路，余生岁岁又年年。世间风月千万种，再无一处可相逢，过往温柔与欢喜，尽数封存在昨日，往后前路各自独行，不问归期[...]
   },
 ];
 
@@ -65,13 +65,6 @@ function updateParallax() {
   if (heroContent) {
     const heroOffset = scrollPosition * 0.3;
     heroContent.style.transform = `translateY(${heroOffset}px)`;
-  }
-  
-  // Update showcase number parallax
-  const showcaseNumber = document.querySelector('.showcase-number');
-  if (showcaseNumber) {
-    const showcaseOffset = scrollPosition * 0.15;
-    showcaseNumber.style.transform = `translateX(-50%) translateY(${showcaseOffset}px)`;
   }
   
   requestAnimationFrame(updateParallax);

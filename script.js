@@ -33,6 +33,7 @@ const postList = document.getElementById("postList");
 const yearEl = document.getElementById("year");
 const menuBtn = document.getElementById("menuBtn");
 const nav = document.getElementById("nav");
+const header = document.querySelector(".site-header");
 
 function renderPosts() {
   if (!postList) return;
@@ -48,19 +49,73 @@ function renderPosts() {
     `
     )
     .join("");
+
+  const postItems = document.querySelectorAll(".post");
+  postItems.forEach((post, index) => {
+    post.style.opacity = "0";
+    post.style.transform = "translateY(20px)";
+    post.style.transition = `all 0.5s ease ${index * 0.1 + 0.2}s`;
+    setTimeout(() => {
+      post.style.opacity = "1";
+      post.style.transform = "translateY(0)";
+    }, 100);
+  });
 }
 
 function setupMenu() {
   if (!menuBtn || !nav) return;
+  
   menuBtn.addEventListener("click", () => {
     nav.classList.toggle("open");
+    menuBtn.innerHTML = nav.classList.contains("open") ? "✕" : "☰";
   });
+
+  document.addEventListener("click", (e) => {
+    if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
+      nav.classList.remove("open");
+      menuBtn.innerHTML = "☰";
+    }
+  });
+}
+
+function setupScrollEffect() {
+  if (!header) return;
+  
+  const handleScroll = () => {
+    if (window.scrollY > 20) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
 }
 
 function setYear() {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 }
 
+function setupSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        nav.classList.remove("open");
+        menuBtn.innerHTML = "☰";
+      }
+    });
+  });
+}
+
 renderPosts();
 setupMenu();
+setupScrollEffect();
+setupSmoothScroll();
 setYear();

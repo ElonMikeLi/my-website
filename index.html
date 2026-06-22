@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mike Li · 个人主页与博客</title>
+    <title>Mike Li · 个人主页</title>
     <meta
       name="description"
-      content="Mike Li 的个人主页与博客：记录生活、思考与创作。"
+      content="Mike Li 的个人主页：记录生活、思考与创作。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -19,10 +19,10 @@
   <body>
     <div class="cursor-glow" id="cursorGlow"></div>
     
-    <header class="site-header glass">
+    <header class="site-header">
       <div class="container nav-wrap">
-        <a class="brand" href="#top">Mike Li</a>
-        <button class="menu-btn" id="menuBtn" aria-label="打开菜单">☰</button>
+        <a class="brand" href="#top">MIKE LI</a>
+        <button class="menu-btn" id="menuBtn" aria-label="打开菜单">MENU</button>
         <nav id="nav" class="nav">
           <a href="#about">关于</a>
           <a href="#life">生活</a>
@@ -36,60 +36,104 @@
       <section class="hero container">
         <div class="hero-bg-shape shape-1" data-parallax="0.03"></div>
         <div class="hero-bg-shape shape-2" data-parallax="0.05"></div>
-        <p class="eyebrow">个人主页 & 生活博客</p>
-        <div class="text-scramble-container">
-          <h1 class="hero-title text"></h1>
-        </div>
-        <p class="hero-desc">
-          在这里，我记录日常、分享思考，也沉淀做事的方法。简洁、克制、专注内容。
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#blog">阅读博客</a>
-          <a class="btn btn-ghost" href="#about">了解我</a>
-        </div>
-      </section>
-
-      <section id="about" class="section container">
-        <h2>关于我</h2>
-        <p>
-          我喜欢把复杂事情讲清楚，也喜欢观察生活里那些细微但重要的变化。
-          这个站点会长期更新，记录成长、项目与灵感。
-        </p>
-      </section>
-
-      <section id="life" class="section container">
-        <h2>生活剪影</h2>
-        <div class="cards">
-          <article class="card">
-            <h3>晨间散步</h3>
-            <p>把手机留在口袋里，专注呼吸与脚步，常常会冒出好点子。</p>
-          </article>
-          <article class="card">
-            <h3>周末阅读</h3>
-            <p>偏爱传记与非虚构写作，关注“如何行动”而不只是“知道道理”。</p>
-          </article>
-          <article class="card">
-            <h3>城市观察</h3>
-            <p>在街角与地铁里看见真实的人间温度，这些都能变成写作素材。</p>
-          </article>
+        <div class="hero-content">
+          <p class="hero-label">个人主页 & 生活博客</p>
+          <div class="text-scramble-container">
+            <h1 class="hero-title text"></h1>
+          </div>
+          <p class="hero-desc">
+            在这里，我记录日常、分享思考，<br>
+            也沉淀做事的方法。简洁、克制、专注内容。
+          </p>
         </div>
       </section>
 
-      <section id="blog" class="section container">
-        <div class="section-head">
-          <h2>最新博客</h2>
-          <span class="muted">持续更新中</span>
+      <section id="about" class="section-split">
+        <div class="container split-container">
+          <div class="split-left">
+            <span class="section-number">01</span>
+            <h2>关于我</h2>
+          </div>
+          <div class="split-right">
+            <p class="lead">
+              喜欢把复杂事情讲清楚，<br>
+              也喜欢观察生活里那些细微但重要的变化。
+            </p>
+            <p class="detail">
+              这个站点会长期更新，记录成长、项目与灵感。
+              从2019年开始专注于个人成长与内容创作，
+              相信持续迭代的力量。
+            </p>
+            <div class="stats">
+              <div class="stat">
+                <span class="stat-number">4+</span>
+                <span class="stat-label">年持续创作</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">篇文章</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">持续更新中</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="posts" id="postList"></div>
+      </section>
+
+      <section id="life" class="section-gallery">
+        <div class="container">
+          <div class="gallery-header">
+            <span class="section-number">02</span>
+            <h2>生活剪影</h2>
+          </div>
+          <div class="gallery-grid">
+            <article class="gallery-item">
+              <div class="gallery-icon">☀</div>
+              <h3>晨间散步</h3>
+              <p>把手机留在口袋里，专注呼吸与脚步，常常会冒出好点子。</p>
+            </article>
+            <article class="gallery-item">
+              <div class="gallery-icon">📖</div>
+              <h3>周末阅读</h3>
+              <p>偏爱传记与非虚构写作，关注"如何行动"而不只是"知道道理"。</p>
+            </article>
+            <article class="gallery-item">
+              <div class="gallery-icon">🏙</div>
+              <h3>城市观察</h3>
+              <p>在街角与地铁里看见真实的人间温度，这些都能变成写作素材。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="blog" class="section-split alt">
+        <div class="container split-container">
+          <div class="split-left">
+            <span class="section-number">03</span>
+            <h2>最新博客</h2>
+          </div>
+          <div class="split-right">
+            <div class="posts-list" id="postList"></div>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer id="contact" class="site-footer">
       <div class="container footer-wrap">
-        <p>© <span id="year"></span> Mike Li. All rights reserved.</p>
-        <div class="socials">
-          <a href="https://github.com/ElonMikeLi" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="#" aria-disabled="true">X / 微博（待补充）</a>
+        <div class="footer-left">
+          <h3>MIKE LI</h3>
+          <p>记录生活，沉淀思考</p>
+        </div>
+        <div class="footer-right">
+          <p class="copyright">© <span id="year"></span> Mike Li. All rights reserved.</p>
+          <div class="socials">
+            <a href="https://github.com/ElonMikeLi" target="_blank" rel="noreferrer">GitHub</a>
+            <span class="divider">/</span>
+            <a href="#" aria-disabled="true">X / 微博</a>
+          </div>
         </div>
       </div>
     </footer>

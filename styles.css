@@ -6,6 +6,7 @@
   --accent: #0066ff;
   --line: #e0e0e0;
   --font: 'Space Grotesk', -apple-system, sans-serif;
+  --loader-bg: #e8f56c;
 }
 
 * {
@@ -36,6 +37,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: hidden;
   cursor: none;
   font-weight: 400;
   line-height: 1.6;
@@ -44,6 +46,133 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Loader */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.loader-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--loader-bg);
+  animation: loaderBgOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
+}
+
+@keyframes loaderBgOut {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.loader-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: loaderContentOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
+}
+
+@keyframes loaderContentOut {
+  to {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+}
+
+.loader-logo {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.logo-l,
+.logo-i {
+  font-size: 4rem;
+  font-weight: 700;
+  position: absolute;
+}
+
+.logo-l {
+  animation: logoLAnim 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes logoLAnim {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  70% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.logo-i {
+  opacity: 0;
+  animation: logoIAnim 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+}
+
+@keyframes logoIAnim {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(45deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateX(35px);
+  }
+  70% {
+    transform: scale(1) translateX(35px);
+  }
+  100% {
+    transform: scale(1) translateX(35px);
+  }
+}
+
+.loader-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: loaderTextAnim 1s ease-out 0.8s forwards;
+}
+
+@keyframes loaderTextAnim {
+  from {
+    opacity: 0;
+    letter-spacing: 0.1em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.3em;
+  }
 }
 
 /* Cursor Glow */

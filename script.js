@@ -3,7 +3,7 @@ const posts = [
     title: "不问归期，不提旧人",
     date: "2026-06-22",
     tag: "随笔",
-    excerpt: "跨山越海皆陌路，余生岁岁又年年。世间风月千万种，再无一处可相逢，过往温柔与欢喜，尽数封存在昨日，往后前路各自独行，不问归期，也莫提旧人。",
+    excerpt: "跨山越海皆陌路，余生岁岁又年年。世间风月千万种，再无一处可相逢。过往温柔与欢喜，尽数封存在昨日。往后前路各自独行，不问归期，也莫提旧人。",
   },
 ];
 
@@ -17,7 +17,10 @@ const cursorGlow = document.getElementById("cursorGlow");
 let mouseX = 0, mouseY = 0;
 let cursorX = 0, cursorY = 0;
 let scrollY = 0;
+let cursorRAF = null;
+let parallaxRAF = null;
 
+// 光标光晕动画
 function updateCursorGlow() {
   if (!cursorGlow) return;
   
@@ -30,26 +33,25 @@ function updateCursorGlow() {
   cursorGlow.style.left = `${cursorX}px`;
   cursorGlow.style.top = `${cursorY + scrollY}px`;
   
-  requestAnimationFrame(updateCursorGlow);
+  cursorRAF = requestAnimationFrame(updateCursorGlow);
 }
 
 function handleMouseMove(e) {
   mouseX = e.clientX;
   mouseY = e.clientY;
-}
-
-function handleMouseLeave() {
-  if (cursorGlow) cursorGlow.classList.add("hidden");
-}
-
-function handleMouseEnter() {
   if (cursorGlow) cursorGlow.classList.remove("hidden");
 }
 
+function handleMouseOutWindow() {
+  if (cursorGlow) cursorGlow.classList.add("hidden");
+}
+
+// 全局滚动统一更新scrollY
 function handleScroll() {
   scrollY = window.scrollY;
 }
 
+// 视差滚动动画
 function updateParallax() {
   const shapes = document.querySelectorAll("[data-parallax]");
   const scrollPosition = window.scrollY;
@@ -60,16 +62,16 @@ function updateParallax() {
     shape.style.transform = `translateY(${yPos}px)`;
   });
   
-  // Update hero content parallax
   const heroContent = document.querySelector('.hero-content');
   if (heroContent) {
     const heroOffset = scrollPosition * 0.3;
     heroContent.style.transform = `translateY(${heroOffset}px)`;
   }
   
-  requestAnimationFrame(updateParallax);
+  parallaxRAF = requestAnimationFrame(updateParallax);
 }
 
+// 渲染文章列表
 function renderPosts() {
   if (!postList) return;
 
@@ -97,26 +99,34 @@ function renderPosts() {
   });
 }
 
+// 移动端菜单（修复原setupMobileMenu未定义报错）
 function setupMenu() {
   if (!menuBtn || !nav) return;
+
+  function closeMenuOutside(e) {
+    if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
+      nav.classList.remove("open");
+      menuBtn.innerHTML = "☰";
+      document.removeEventListener("click", closeMenuOutside);
+    }
+  }
   
   menuBtn.addEventListener("click", () => {
     nav.classList.toggle("open");
     menuBtn.innerHTML = nav.classList.contains("open") ? "✕" : "☰";
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
-      nav.classList.remove("open");
-      menuBtn.innerHTML = "☰";
+    if (nav.classList.contains("open")) {
+      document.addEventListener("click", closeMenuOutside);
+    } else {
+      document.removeEventListener("click", closeMenuOutside);
     }
   });
 }
 
+// 头部滚动阴影
 function setupScrollEffect() {
   if (!header) return;
   
-  const handleScroll = () => {
+  const headerScrollHandle = () => {
     if (window.scrollY > 20) {
       header.classList.add("scrolled");
     } else {
@@ -124,23 +134,28 @@ function setupScrollEffect() {
     }
   };
 
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll();
+  window.addEventListener("scroll", headerScrollHandle, { passive: true });
+  headerScrollHandle();
 }
 
+// 底部年份
 function setYear() {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 }
 
+// 锚点平滑滚动（只保留一套，删除重复代码）
 function setupSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute("href"));
+      const targetId = this.getAttribute("href");
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
       if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
+        const offsetTop = target.offsetTop - 80;
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
         });
         nav.classList.remove("open");
         menuBtn.innerHTML = "☰";
@@ -149,6 +164,7 @@ function setupSmoothScroll() {
   });
 }
 
+// 交互初始化
 function initInteractiveEffects() {
   console.log("Initializing interactive effects...");
   
@@ -159,39 +175,26 @@ function initInteractiveEffects() {
   console.log("Parallax started");
   
   document.addEventListener("mousemove", handleMouseMove, { passive: true });
-  document.addEventListener("mouseleave", handleMouseLeave);
-  document.addEventListener("mouseenter", handleMouseEnter);
+  window.addEventListener("mouseout", handleMouseOutWindow);
   window.addEventListener("scroll", handleScroll, { passive: true });
-  
-  // Smooth scroll behavior
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      
-      const target = document.querySelector(targetId);
-      if (target) {
-        const offsetTop = target.offsetTop - 80;
-        window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth'
-        });
-        
-        // Close mobile menu
-        nav.classList.remove('open');
-        menuBtn.innerHTML = 'MENU';
-      }
-    });
-  });
   
   console.log("Interactive effects initialized!");
 }
 
+// 页面切后台暂停动画，优化性能
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    cancelAnimationFrame(cursorRAF);
+    cancelAnimationFrame(parallaxRAF);
+  } else {
+    updateCursorGlow();
+    updateParallax();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
   
-  // Prevent default anchor scroll behavior
   if (window.location.hash) {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
@@ -202,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const html = document.documentElement;
   
-  // SVG draw animation
+  // 【修复LOGO闪烁核心函数】
   function animateSvg() {
     const paths = document.querySelectorAll('#loaderSvg path');
     console.log("Found", paths.length, "SVG paths");
@@ -212,14 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    const duration = 1500; // 1.5 seconds
-    
+    const duration = 1500;
+    // 页面加载瞬间先完整显示LOGO打底，杜绝空白闪烁
+    paths.forEach(path => {
+      path.style.strokeDasharray = path.getTotalLength();
+      path.style.strokeDashoffset = 0;
+    });
+
     try {
-      // Get actual path lengths and set initial state
       const pathData = Array.from(paths).map((path, index) => {
         const length = path.getTotalLength();
         console.log("Path", index, "length:", length);
-        path.style.strokeDasharray = length;
         path.style.strokeDashoffset = length;
         path.style.transition = 'none';
         return { path, length, delay: index * 0.2 };
@@ -244,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
           requestAnimationFrame(animate);
         } else {
           console.log("SVG animation complete");
-          // Ensure final state is fully drawn
           pathData.forEach(({ path }) => {
             path.style.strokeDashoffset = 0;
           });
@@ -260,14 +265,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Start SVG animation after short delay
-  setTimeout(animateSvg, 100);
+  // 移除100ms延迟，DOM加载完立刻启动LOGO绘制
+  animateSvg();
   
   function removeLoader() {
     if (loader) {
       console.log("Removing loader...");
       
-      // Reset scroll position to top
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
@@ -281,9 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         loader.style.display = 'none';
         console.log("Loader removed");
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
         initTextScramble();
       }, 600);
     } else {
@@ -293,20 +294,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  setTimeout(removeLoader, 2500);
+  // 同步动画时长，消除LOGO画完后的空白等待间隙
+  setTimeout(removeLoader, 1900);
   
   renderPosts();
-  setupMobileMenu();
+  setupMenu(); // 修复原报错 setupMobileMenu()
   setupScrollEffect();
   setupSmoothScroll();
   setYear();
   initInteractiveEffects();
 });
 
-// ——————————————————————————————————————————————————
-// TextScramble
-// ——————————————————————————————————————————————————
-
+// 文字乱码动画类（完全保留原样）
 class TextScramble {
   constructor(el) {
     this.el = el
@@ -361,10 +360,7 @@ class TextScramble {
   }
 }
 
-// ——————————————————————————————————————————————————
-// Initialize Text Scramble Effect
-// ——————————————————————————————————————————————————
-
+// 文字动画初始化
 function initTextScramble() {
   const phrases = [
     'MIKE LI',

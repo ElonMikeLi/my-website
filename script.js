@@ -191,6 +191,11 @@ function initInteractiveEffects() {
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
   
+  // Ensure page starts at top
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
   const loader = document.getElementById('loader');
   const body = document.body;
   const html = document.documentElement;
@@ -198,6 +203,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function removeLoader() {
     if (loader) {
       console.log("Removing loader...");
+      
+      // Reset scroll position to top
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
       loader.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       loader.style.opacity = '0';
       loader.style.transform = 'translateY(-100%)';
@@ -207,6 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         loader.style.display = 'none';
         console.log("Loader removed");
+        // Ensure scroll is at top after loader is gone
+        window.scrollTo(0, 0);
         // Start text scramble after loader is gone
         initTextScramble();
       }, 600);

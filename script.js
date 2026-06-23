@@ -191,6 +191,12 @@ function initInteractiveEffects() {
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
   
+  // Save hash and clear it to prevent auto-scroll
+  const originalHash = window.location.hash;
+  if (originalHash) {
+    history.replaceState(null, null, ' ');
+  }
+  
   // Ensure page starts at top
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
@@ -220,6 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Loader removed");
         // Ensure scroll is at top after loader is gone
         window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         // Start text scramble after loader is gone
         initTextScramble();
       }, 600);

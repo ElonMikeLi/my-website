@@ -207,10 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         loader.style.display = 'none';
         console.log("Loader removed");
+        // Start text scramble after loader is gone
+        initTextScramble();
       }, 600);
     } else {
       html.style.overflowY = 'auto';
       body.style.overflowY = 'auto';
+      initTextScramble();
     }
   }
   
@@ -222,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSmoothScroll();
   setYear();
   initInteractiveEffects();
-  initTextScramble();
 });
 
 // ——————————————————————————————————————————————————
@@ -296,17 +298,23 @@ function initTextScramble() {
   ]
   
   const el = document.querySelector('.text')
-  if (!el) return
+  if (!el) {
+    console.log("Text scramble element not found");
+    return;
+  }
+  
+  console.log("Text scramble initialized on element:", el);
   
   const fx = new TextScramble(el)
   
   let counter = 0
   const next = () => {
+    console.log("Setting text to:", phrases[counter]);
     fx.setText(phrases[counter]).then(() => {
       setTimeout(next, 2500)
     })
     counter = (counter + 1) % phrases.length
   }
   
-  setTimeout(next, 2500)
+  next()
 }

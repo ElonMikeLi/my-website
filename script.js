@@ -205,38 +205,63 @@ document.addEventListener('DOMContentLoaded', () => {
   // SVG draw animation
   function animateSvg() {
     const paths = document.querySelectorAll('#loaderSvg path');
-    const duration = 1500; // 1.5 seconds
-    const startTime = performance.now();
+    console.log("Found", paths.length, "SVG paths");
     
-    function animate(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      
-      paths.forEach((path, index) => {
-        const pathLength = 1000;
-        const offset = pathLength - (eased * pathLength);
-        // Stagger the paths slightly
-        const delay = index * 0.15;
-        if (progress > delay) {
-          const adjustedProgress = Math.min((progress - delay) / (1 - delay), 1);
-          const adjustedEased = 1 - Math.pow(1 - adjustedProgress, 3);
-          path.style.strokeDashoffset = pathLength - (adjustedEased * pathLength);
-        }
-      });
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+    if (paths.length === 0) {
+      console.log("No SVG paths found!");
+      return;
     }
     
-    requestAnimationFrame(animate);
+    const duration = 1500; // 1.5 seconds
+    
+    try {
+      // Get actual path lengths and set initial state
+      const pathData = Array.from(paths).map((path, index) => {
+        const length = path.getTotalLength();
+        console.log("Path", index, "length:", length);
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        path.style.transition = 'none';
+        return { path, length, delay: index * 0.2 };
+      });
+      
+      const startTime = performance.now();
+      console.log("Starting SVG animation at", startTime);
+      
+      function animate(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        pathData.forEach(({ path, length, delay }) => {
+          if (progress >= delay) {
+            const adjustedProgress = Math.min((progress - delay) / (1 - delay), 1);
+            const eased = 1 - Math.pow(1 - adjustedProgress, 3);
+            path.style.strokeDashoffset = length * (1 - eased);
+          }
+        });
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          console.log("SVG animation complete");
+          // Ensure final state is fully drawn
+          pathData.forEach(({ path }) => {
+            path.style.strokeDashoffset = 0;
+          });
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    } catch (e) {
+      console.log("SVG animation error, showing logo directly:", e);
+      paths.forEach(path => {
+        path.style.strokeDashoffset = 0;
+      });
+    }
   }
   
   // Start SVG animation after short delay
-  setTimeout(animateSvg, 300);
+  setTimeout(animateSvg, 100);
   
   function removeLoader() {
     if (loader) {

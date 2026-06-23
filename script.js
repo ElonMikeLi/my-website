@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  setTimeout(removeLoader, 2200);
+  setTimeout(removeLoader, 2500);
   
   renderPosts();
   setupMobileMenu();

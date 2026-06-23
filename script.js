@@ -190,8 +190,20 @@ function initInteractiveEffects() {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
+  
+  const loader = document.getElementById('loader');
+  if (loader) {
+    setTimeout(() => {
+      loader.classList.add('loader-exit');
+      setTimeout(() => {
+        loader.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }, 600);
+    }, 2000);
+  }
+  
   renderPosts();
-  setupMenu();
+  setupMobileMenu();
   setupScrollEffect();
   setupSmoothScroll();
   setYear();

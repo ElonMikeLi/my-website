@@ -192,15 +192,26 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
   
   const loader = document.getElementById('loader');
-  if (loader) {
-    setTimeout(() => {
-      loader.classList.add('loader-exit');
+  const body = document.body;
+  
+  function removeLoader() {
+    if (loader) {
+      console.log("Removing loader...");
+      loader.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      loader.style.opacity = '0';
+      loader.style.transform = 'translateY(-100%)';
+      body.style.overflowY = 'auto';
+      
       setTimeout(() => {
         loader.style.display = 'none';
-        document.body.style.overflow = 'auto';
-      }, 600);
-    }, 2000);
+        console.log("Loader removed");
+      }, 500);
+    } else {
+      body.style.overflowY = 'auto';
+    }
   }
+  
+  setTimeout(removeLoader, 2000);
   
   renderPosts();
   setupMobileMenu();
@@ -294,6 +305,5 @@ function initTextScramble() {
     counter = (counter + 1) % phrases.length
   }
   
-  // Start after initial animations
-  setTimeout(next, 1000)
+  setTimeout(next, 500)
 }

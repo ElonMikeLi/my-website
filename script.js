@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(removeLoader, 2500);
   
   renderPosts();
-  setupMobileMenu();
+  setupMenu();
   setupScrollEffect();
   setupSmoothScroll();
   setYear();

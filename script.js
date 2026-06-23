@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const loader = document.getElementById('loader');
   const body = document.body;
+  const html = document.documentElement;
   
   function removeLoader() {
     if (loader) {
@@ -200,18 +201,20 @@ document.addEventListener('DOMContentLoaded', () => {
       loader.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       loader.style.opacity = '0';
       loader.style.transform = 'translateY(-100%)';
+      html.style.overflowY = 'auto';
       body.style.overflowY = 'auto';
       
       setTimeout(() => {
         loader.style.display = 'none';
         console.log("Loader removed");
-      }, 500);
+      }, 600);
     } else {
+      html.style.overflowY = 'auto';
       body.style.overflowY = 'auto';
     }
   }
   
-  setTimeout(removeLoader, 2000);
+  setTimeout(removeLoader, 2200);
   
   renderPosts();
   setupMobileMenu();
@@ -305,5 +308,5 @@ function initTextScramble() {
     counter = (counter + 1) % phrases.length
   }
   
-  setTimeout(next, 500)
+  setTimeout(next, 2500)
 }

@@ -191,16 +191,13 @@ function initInteractiveEffects() {
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing app...");
   
-  // Save hash and clear it to prevent auto-scroll
-  const originalHash = window.location.hash;
-  if (originalHash) {
-    history.replaceState(null, null, ' ');
+  // Prevent default anchor scroll behavior
+  if (window.location.hash) {
+    // Immediately scroll to top before browser can scroll to anchor
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
-  
-  // Ensure page starts at top
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
   
   const loader = document.getElementById('loader');
   const body = document.body;

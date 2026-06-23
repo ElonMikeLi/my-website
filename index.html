@@ -15,6 +15,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Prevent anchor auto-scroll before page loads
+      if (window.location.hash) {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+      window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
   </head>
   <body>
     <div class="loader" id="loader">

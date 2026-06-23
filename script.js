@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Prevent default anchor scroll behavior
   if (window.location.hash) {
-    // Immediately scroll to top before browser can scroll to anchor
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -202,6 +201,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const loader = document.getElementById('loader');
   const body = document.body;
   const html = document.documentElement;
+  
+  // SVG draw animation
+  function animateSvg() {
+    const paths = document.querySelectorAll('#loaderSvg path');
+    const duration = 1500; // 1.5 seconds
+    const startTime = performance.now();
+    
+    function animate(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      
+      paths.forEach((path, index) => {
+        const pathLength = 1000;
+        const offset = pathLength - (eased * pathLength);
+        // Stagger the paths slightly
+        const delay = index * 0.15;
+        if (progress > delay) {
+          const adjustedProgress = Math.min((progress - delay) / (1 - delay), 1);
+          const adjustedEased = 1 - Math.pow(1 - adjustedProgress, 3);
+          path.style.strokeDashoffset = pathLength - (adjustedEased * pathLength);
+        }
+      });
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+  
+  // Start SVG animation after short delay
+  setTimeout(animateSvg, 300);
   
   function removeLoader() {
     if (loader) {
@@ -221,11 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         loader.style.display = 'none';
         console.log("Loader removed");
-        // Ensure scroll is at top after loader is gone
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
-        // Start text scramble after loader is gone
         initTextScramble();
       }, 600);
     } else {

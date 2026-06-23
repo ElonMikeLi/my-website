@@ -67,13 +67,6 @@ function updateParallax() {
     heroContent.style.transform = `translateY(${heroOffset}px)`;
   }
   
-  // Update showcase number parallax
-  const showcaseNumber = document.querySelector('.showcase-number');
-  if (showcaseNumber) {
-    const showcaseOffset = scrollPosition * 0.15;
-    showcaseNumber.style.transform = `translateX(-50%) translateY(${showcaseOffset}px)`;
-  }
-  
   requestAnimationFrame(updateParallax);
 }
 
@@ -169,62 +162,6 @@ function initInteractiveEffects() {
   document.addEventListener("mouseleave", handleMouseLeave);
   document.addEventListener("mouseenter", handleMouseEnter);
   window.addEventListener("scroll", handleScroll, { passive: true });
-  
-  // Add hover effects to showcase cards
-  const showcaseCards = document.querySelectorAll(".showcase-card");
-  showcaseCards.forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
-      
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-    });
-    
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)";
-    });
-  });
-  
-  // Animated stats counter
-  const animateNumbers = () => {
-    const stats = document.querySelectorAll('.stat-number');
-    stats.forEach((stat) => {
-      const target = parseInt(stat.textContent);
-      if (isNaN(target)) return;
-      
-      let current = 0;
-      const increment = target / 60;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          stat.textContent = stat.textContent.includes('∞') ? '∞' : target + '+';
-          clearInterval(timer);
-        } else {
-          stat.textContent = Math.floor(current) + '+';
-        }
-      }, 20);
-    });
-  };
-  
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateNumbers();
-        statsObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.5 });
-  
-  const statsContainer = document.querySelector('.stats');
-  if (statsContainer) {
-    statsObserver.observe(statsContainer);
-  }
   
   // Smooth scroll behavior
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {

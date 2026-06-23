@@ -446,27 +446,7 @@ body {
   margin: 0 0 16px;
 }
 
-.socials {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 16px;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
 
-.socials a {
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.socials a:hover {
-  color: var(--bg);
-}
-
-.divider {
-  color: rgba(255, 255, 255, 0.3);
-}
 
 /* Photo Section */
 .section-photo {

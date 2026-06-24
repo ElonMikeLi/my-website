@@ -1,3 +1,20 @@
+// ============================================================
+// 常量配置（一处修改，全局生效）
+// ============================================================
+const CONFIG = {
+  SVG_DRAW_DURATION: 1500,       // SVG 绘制动画时长 (ms)
+  LOADER_VISIBLE_DURATION: 1900, // 加载画面总停留时长 (ms)
+  LOADER_EXIT_DURATION: 500,     // 加载画面退出动画时长 (ms)
+  TEXT_SCRAMBLE_INTERVAL: 2500,  // 文字打乱间隔 (ms)
+  CURSOR_GLOW_LERP: 0.15,       // 光晕跟随平滑系数
+  PARALLAX_HERO: 0.3,            // Hero 视差系数
+  HEADER_SCROLL_THRESHOLD: 20,   // 头部阴影触发滚动距离
+  SMOOTH_SCROLL_OFFSET: 80,      // 锚点滚动偏移量
+};
+
+// ============================================================
+// 文章数据
+// ============================================================
 const posts = [
   {
     title: "不问归期，不提旧人",
@@ -7,75 +24,106 @@ const posts = [
   },
 ];
 
-const postList = document.getElementById("postList");
-const yearEl = document.getElementById("year");
-const menuBtn = document.getElementById("menuBtn");
-const nav = document.getElementById("nav");
-const header = document.querySelector(".site-header");
-const cursorGlow = document.getElementById("cursorGlow");
+// ============================================================
+// DOM 引用（统一获取，方便调试）
+// ============================================================
+const DOM = {
+  get postList() { return document.getElementById("postList"); },
+  get yearEl() { return document.getElementById("year"); },
+  get menuBtn() { return document.getElementById("menuBtn"); },
+  get nav() { return document.getElementById("nav"); },
+  get header() { return document.querySelector(".site-header"); },
+  get cursorGlow() { return document.getElementById("cursorGlow"); },
+  get loader() { return document.getElementById("loader"); },
+};
 
+// ============================================================
+// 状态变量
+// ============================================================
 let mouseX = 0, mouseY = 0;
 let cursorX = 0, cursorY = 0;
-let scrollY = 0;
+let mouseInViewport = false;
 let cursorRAF = null;
-let parallaxRAF = null;
 
-// 光标光晕动画
+// ============================================================
+// 光标光晕 —— 鼠标在视口内才运行动画，离开时停止
+// ============================================================
 function updateCursorGlow() {
-  if (!cursorGlow) return;
-  
+  const glow = DOM.cursorGlow;
+  if (!glow) return;
+
   const dx = mouseX - cursorX;
   const dy = mouseY - cursorY;
-  
-  cursorX += dx * 0.15;
-  cursorY += dy * 0.15;
-  
-  cursorGlow.style.left = `${cursorX}px`;
-  cursorGlow.style.top = `${cursorY + scrollY}px`;
-  
+  cursorX += dx * CONFIG.CURSOR_GLOW_LERP;
+  cursorY += dy * CONFIG.CURSOR_GLOW_LERP;
+
+  glow.style.left = `${cursorX}px`;
+  glow.style.top = `${cursorY + window.scrollY}px`;
+
+  if (mouseInViewport) {
+    cursorRAF = requestAnimationFrame(updateCursorGlow);
+  }
+}
+
+function startCursorGlow() {
+  if (cursorRAF) cancelAnimationFrame(cursorRAF);
   cursorRAF = requestAnimationFrame(updateCursorGlow);
+}
+
+function stopCursorGlow() {
+  if (cursorRAF) {
+    cancelAnimationFrame(cursorRAF);
+    cursorRAF = null;
+  }
 }
 
 function handleMouseMove(e) {
   mouseX = e.clientX;
   mouseY = e.clientY;
-  if (cursorGlow) cursorGlow.classList.remove("hidden");
+  if (!mouseInViewport) {
+    mouseInViewport = true;
+    const glow = DOM.cursorGlow;
+    if (glow) glow.style.opacity = "1";
+    startCursorGlow();
+  }
 }
 
-function handleMouseOutWindow() {
-  if (cursorGlow) cursorGlow.classList.add("hidden");
+function handleMouseLeave() {
+  mouseInViewport = false;
+  const glow = DOM.cursorGlow;
+  if (glow) glow.style.opacity = "0";
 }
 
-// 全局滚动统一更新scrollY
-function handleScroll() {
-  scrollY = window.scrollY;
-}
-
-// 视差滚动动画
+// ============================================================
+// 视差滚动 —— 改用 scroll 事件驱动，消除独立 RAF 循环
+// ============================================================
 function updateParallax() {
   const shapes = document.querySelectorAll("[data-parallax]");
   const scrollPosition = window.scrollY;
-  
+
   shapes.forEach((shape) => {
     const speed = parseFloat(shape.dataset.parallax) || 0.05;
-    const yPos = scrollPosition * speed;
-    shape.style.transform = `translateY(${yPos}px)`;
+    shape.style.transform = `translateY(${scrollPosition * speed}px)`;
   });
-  
-  const heroContent = document.querySelector('.hero-content');
+
+  const heroContent = document.querySelector(".hero-content");
   if (heroContent) {
-    const heroOffset = scrollPosition * 0.3;
-    heroContent.style.transform = `translateY(${heroOffset}px)`;
+    heroContent.style.transform = `translateY(${scrollPosition * CONFIG.PARALLAX_HERO}px)`;
   }
-  
-  parallaxRAF = requestAnimationFrame(updateParallax);
 }
 
+// ============================================================
 // 渲染文章列表
+// ============================================================
 function renderPosts() {
-  if (!postList) return;
+  const list = DOM.postList;
+  if (!list) {
+    console.warn("renderPosts: #postList not found");
+    return;
+  }
+  if (!posts.length) return;
 
-  postList.innerHTML = posts
+  list.innerHTML = posts
     .map(
       (post) => `
       <article class="post">
@@ -87,34 +135,43 @@ function renderPosts() {
     )
     .join("");
 
-  const postItems = document.querySelectorAll(".post");
+  const postItems = list.querySelectorAll(".post");
   postItems.forEach((post, index) => {
     post.style.opacity = "0";
     post.style.transform = "translateY(20px)";
     post.style.transition = `all 0.5s ease ${index * 0.1 + 0.2}s`;
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       post.style.opacity = "1";
       post.style.transform = "translateY(0)";
-    }, 100);
+    });
   });
 }
 
-// 移动端菜单（修复原setupMobileMenu未定义报错）
+// ============================================================
+// 移动端菜单
+// ============================================================
 function setupMenu() {
-  if (!menuBtn || !nav) return;
+  const btn = DOM.menuBtn;
+  const navEl = DOM.nav;
+  if (!btn || !navEl) {
+    if (!btn) console.warn("setupMenu: #menuBtn not found");
+    if (!navEl) console.warn("setupMenu: #nav not found");
+    return;
+  }
 
   function closeMenuOutside(e) {
-    if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
-      nav.classList.remove("open");
-      menuBtn.innerHTML = "☰";
+    if (!navEl.contains(e.target) && !btn.contains(e.target)) {
+      navEl.classList.remove("open");
+      btn.innerHTML = "☰";
       document.removeEventListener("click", closeMenuOutside);
     }
   }
-  
-  menuBtn.addEventListener("click", () => {
-    nav.classList.toggle("open");
-    menuBtn.innerHTML = nav.classList.contains("open") ? "✕" : "☰";
-    if (nav.classList.contains("open")) {
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation(); // 防冒泡，避免触发 document 的 closeMenuOutside
+    navEl.classList.toggle("open");
+    btn.innerHTML = navEl.classList.contains("open") ? "✕" : "☰";
+    if (navEl.classList.contains("open")) {
       document.addEventListener("click", closeMenuOutside);
     } else {
       document.removeEventListener("click", closeMenuOutside);
@@ -122,122 +179,131 @@ function setupMenu() {
   });
 }
 
+// ============================================================
 // 头部滚动阴影
+// ============================================================
 function setupScrollEffect() {
-  if (!header) return;
-  
-  const headerScrollHandle = () => {
-    if (window.scrollY > 20) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
-    }
+  const hdr = DOM.header;
+  if (!hdr) {
+    console.warn("setupScrollEffect: .site-header not found");
+    return;
+  }
+
+  const handler = () => {
+    hdr.classList.toggle("scrolled", window.scrollY > CONFIG.HEADER_SCROLL_THRESHOLD);
   };
 
-  window.addEventListener("scroll", headerScrollHandle, { passive: true });
-  headerScrollHandle();
+  window.addEventListener("scroll", handler, { passive: true });
+  handler();
 }
 
+// ============================================================
 // 底部年份
+// ============================================================
 function setYear() {
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  const el = DOM.yearEl;
+  if (el) {
+    el.textContent = new Date().getFullYear();
+  } else {
+    console.warn("setYear: #year not found");
+  }
 }
 
-// 锚点平滑滚动（只保留一套，删除重复代码）
+// ============================================================
+// 锚点平滑滚动
+// ============================================================
 function setupSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
       e.preventDefault();
       const targetId = this.getAttribute("href");
-      if (targetId === '#') return;
+      if (targetId === "#") return;
       const target = document.querySelector(targetId);
       if (target) {
-        const offsetTop = target.offsetTop - 80;
         window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth'
+          top: target.offsetTop - CONFIG.SMOOTH_SCROLL_OFFSET,
+          behavior: "smooth",
         });
-        nav.classList.remove("open");
-        menuBtn.innerHTML = "☰";
+        const navEl = DOM.nav;
+        const btn = DOM.menuBtn;
+        if (navEl) navEl.classList.remove("open");
+        if (btn) btn.innerHTML = "☰";
       }
     });
   });
 }
 
+// ============================================================
 // 交互初始化
+// ============================================================
 function initInteractiveEffects() {
   console.log("Initializing interactive effects...");
-  
-  updateCursorGlow();
-  console.log("Cursor glow started");
-  
-  updateParallax();
-  console.log("Parallax started");
-  
+
   document.addEventListener("mousemove", handleMouseMove, { passive: true });
-  window.addEventListener("mouseout", handleMouseOutWindow);
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  
+  document.addEventListener("mouseleave", handleMouseLeave);
+  window.addEventListener("scroll", updateParallax, { passive: true });
+
+  // 初始调用一次，设置正确位置
+  updateParallax();
+
   console.log("Interactive effects initialized!");
 }
 
+// ============================================================
 // 页面切后台暂停动画，优化性能
-document.addEventListener('visibilitychange', () => {
+// ============================================================
+document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    cancelAnimationFrame(cursorRAF);
-    cancelAnimationFrame(parallaxRAF);
-  } else {
-    updateCursorGlow();
-    updateParallax();
+    stopCursorGlow();
+  } else if (mouseInViewport) {
+    startCursorGlow();
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+// ============================================================
+// 主入口
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded, initializing app...");
-  
+
+  // 锚点页面：立即滚动到顶部
   if (window.location.hash) {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }
-  
-  const loader = document.getElementById('loader');
+
+  const loader = DOM.loader;
   const body = document.body;
   const html = document.documentElement;
-  
-  // 【修复LOGO闪烁核心函数】
+
+  // ========== SVG 手写绘制动画 ==========
   function animateSvg() {
-    const paths = document.querySelectorAll('#loaderSvg path');
+    const paths = document.querySelectorAll("#loaderSvg path");
     console.log("Found", paths.length, "SVG paths");
-    
+
     if (paths.length === 0) {
       console.log("No SVG paths found!");
       return;
     }
-    
-    const duration = 1500;
-    // 页面加载瞬间先完整显示LOGO打底，杜绝空白闪烁
-    paths.forEach(path => {
-      path.style.strokeDasharray = path.getTotalLength();
-      path.style.strokeDashoffset = 0;
-    });
 
     try {
       const pathData = Array.from(paths).map((path, index) => {
         const length = path.getTotalLength();
         console.log("Path", index, "length:", length);
+        path.style.strokeDasharray = length;
         path.style.strokeDashoffset = length;
-        path.style.transition = 'none';
+        path.style.transition = "none";
         return { path, length, delay: index * 0.2 };
       });
-      
+
       const startTime = performance.now();
       console.log("Starting SVG animation at", startTime);
-      
+
       function animate(currentTime) {
         const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
+        const progress = Math.min(elapsed / CONFIG.SVG_DRAW_DURATION, 1);
+
         pathData.forEach(({ path, length, delay }) => {
           if (progress >= delay) {
             const adjustedProgress = Math.min((progress - delay) / (1 - delay), 1);
@@ -245,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
             path.style.strokeDashoffset = length * (1 - eased);
           }
         });
-        
+
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
@@ -255,48 +321,48 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
       }
-      
+
       requestAnimationFrame(animate);
     } catch (e) {
       console.log("SVG animation error, showing logo directly:", e);
-      paths.forEach(path => {
+      paths.forEach((path) => {
         path.style.strokeDashoffset = 0;
       });
     }
   }
-  
-  // 移除100ms延迟，DOM加载完立刻启动LOGO绘制
+
+  // 立即启动 SVG 绘制
   animateSvg();
-  
+
+  // ========== 移除加载画面 ==========
   function removeLoader() {
     if (loader) {
       console.log("Removing loader...");
-      
+
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
-      loader.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      loader.style.opacity = '0';
-      loader.style.transform = 'translateY(-100%)';
-      html.style.overflowY = 'auto';
-      body.style.overflowY = 'auto';
-      
+
+      loader.style.transition = `opacity ${CONFIG.LOADER_EXIT_DURATION}ms ease, transform ${CONFIG.LOADER_EXIT_DURATION}ms ease`;
+      loader.style.opacity = "0";
+      loader.style.transform = "translateY(-100%)";
+      html.style.overflowY = "auto";
+      body.style.overflowY = "auto";
+
       setTimeout(() => {
-        loader.style.display = 'none';
+        loader.style.display = "none";
         console.log("Loader removed");
         initTextScramble();
-      }, 600);
+      }, CONFIG.LOADER_EXIT_DURATION);
     } else {
-      html.style.overflowY = 'auto';
-      body.style.overflowY = 'auto';
+      html.style.overflowY = "auto";
+      body.style.overflowY = "auto";
       initTextScramble();
     }
   }
-  
-  // 同步动画时长，消除LOGO画完后的空白等待间隙
-  setTimeout(removeLoader, 1900);
-  
+
+  setTimeout(removeLoader, CONFIG.LOADER_VISIBLE_DURATION);
+
   renderPosts();
   setupMenu();
   setupScrollEffect();
@@ -305,88 +371,87 @@ document.addEventListener('DOMContentLoaded', () => {
   initInteractiveEffects();
 });
 
-// 文字乱码动画类（完全保留原样）
+// ============================================================
+// TextScramble 文字打乱类
+// ============================================================
 class TextScramble {
   constructor(el) {
-    this.el = el
-    this.chars = '!<>-_\\/[]{}—=+*^?#________'
-    this.update = this.update.bind(this)
+    this.el = el;
+    this.chars = "!<>-_\\/[]{}—=+*^?#________";
+    this.update = this.update.bind(this);
   }
   setText(newText) {
-    const oldText = this.el.innerText
-    const length = Math.max(oldText.length, newText.length)
-    const promise = new Promise((resolve) => this.resolve = resolve)
-    this.queue = []
+    const oldText = this.el.innerText;
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => (this.resolve = resolve));
+    this.queue = [];
     for (let i = 0; i < length; i++) {
-      const from = oldText[i] || ''
-      const to = newText[i] || ''
-      const start = Math.floor(Math.random() * 10)
-      const end = start + Math.floor(Math.random() * 20)
-      this.queue.push({ from, to, start, end })
+      const from = oldText[i] || "";
+      const to = newText[i] || "";
+      const start = Math.floor(Math.random() * 10);
+      const end = start + Math.floor(Math.random() * 20);
+      this.queue.push({ from, to, start, end });
     }
-    cancelAnimationFrame(this.frameRequest)
-    this.frame = 0
-    this.update()
-    return promise
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
   }
   update() {
-    let output = ''
-    let complete = 0
+    let output = "";
+    let complete = 0;
     for (let i = 0, n = this.queue.length; i < n; i++) {
-      let { from, to, start, end, char } = this.queue[i]
+      let { from, to, start, end, char } = this.queue[i];
       if (this.frame >= end) {
-        complete++
-        output += to
+        complete++;
+        output += to;
       } else if (this.frame >= start) {
         if (!char || Math.random() < 0.28) {
-          char = this.randomChar()
-          this.queue[i].char = char
+          char = this.randomChar();
+          this.queue[i].char = char;
         }
-        output += `<span class="dud">${char}</span>`
+        output += `<span class="dud">${char}</span>`;
       } else {
-        output += from
+        output += from;
       }
     }
-    this.el.innerHTML = output
+    this.el.innerHTML = output;
     if (complete === this.queue.length) {
-      this.resolve()
+      this.resolve();
     } else {
-      this.frameRequest = requestAnimationFrame(this.update)
-      this.frame++
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
     }
   }
   randomChar() {
-    return this.chars[Math.floor(Math.random() * this.chars.length)]
+    return this.chars[Math.floor(Math.random() * this.chars.length)];
   }
 }
 
-// 文字动画初始化
+// ============================================================
+// 文字打乱动画初始化
+// ============================================================
 function initTextScramble() {
-  const phrases = [
-    'MIKE LI',
-    'RECORD LIFE',
-    'THINK & CREATE',
-    'MINIMAL'
-  ]
-  
-  const el = document.querySelector('.text')
+  const phrases = ["MIKE LI", "RECORD LIFE", "THINK & CREATE", "MINIMAL"];
+
+  const el = document.querySelector(".text");
   if (!el) {
-    console.log("Text scramble element not found");
+    console.warn("initTextScramble: .text element not found");
     return;
   }
-  
+
   console.log("Text scramble initialized on element:", el);
-  
-  const fx = new TextScramble(el)
-  
-  let counter = 0
+
+  const fx = new TextScramble(el);
+
+  let counter = 0;
   const next = () => {
     console.log("Setting text to:", phrases[counter]);
     fx.setText(phrases[counter]).then(() => {
-      setTimeout(next, 2500)
-    })
-    counter = (counter + 1) % phrases.length
-  }
-  
-  next()
+      setTimeout(next, CONFIG.TEXT_SCRAMBLE_INTERVAL);
+    });
+    counter = (counter + 1) % phrases.length;
+  };
+
+  next();
 }

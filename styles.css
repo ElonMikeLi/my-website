@@ -47,7 +47,7 @@ a {
   text-decoration: none;
 }
 
-/* Loader */
+/* Loader 【修复LOGO闪烁核心CSS】 */
 .loader {
   position: fixed;
   top: 0;
@@ -58,8 +58,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e8f56c;
+  background: var(--loader-bg);
   overflow: hidden;
+  opacity: 1;
+  visibility: visible;
 }
 
 .loader-content {
@@ -83,10 +85,14 @@ a {
   display: block;
 }
 
+/* 关键：页面一渲染就完整显示LOGO，不会空白闪烁 */
 .loader-logo path {
   fill: none;
+  stroke: #000;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: auto;
+  stroke-dashoffset: 0;
 }
 
 .loader-text {
@@ -508,8 +514,6 @@ body {
   color: rgba(255, 255, 255, 0.6);
   margin: 0 0 16px;
 }
-
-
 
 /* Photo Section */
 .section-photo {

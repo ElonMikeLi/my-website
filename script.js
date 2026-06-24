@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(removeLoader, 1900);
   
   renderPosts();
-  setupMenu(); // 修复原报错 setupMobileMenu()
+  setupMenu();
   setupScrollEffect();
   setupSmoothScroll();
   setYear();

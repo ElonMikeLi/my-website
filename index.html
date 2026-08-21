@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIKE LI · Personal Space</title>
+<meta name="description" content="记录生活，沉淀思考 — Mike Li 的个人主页与音乐收藏">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Loading -->
+<div class="loading" id="loading">
+  <div class="loading-text">MIKE LI</div>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loadingBar"></div></div>
+</div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#home" class="nav-logo">MIKE LI</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#albums">Albums</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-typewriter" id="typewriter"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <div class="hero-title-top">MIKE</div>
+      <div class="hero-title-bottom">LI</div>
+    </h1>
+  </div>
+  <div class="hero-clock">
+    <div class="hero-clock-time" id="clockTime">00:00:00</div>
+    <div class="hero-clock-date" id="clockDate">—</div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-arrow"></div>
+  </div>
+  <div class="hero-gradient"></div>
+</section>
+
+<!-- Spiral Album Wall -->
+<section class="spiral-section" id="albums">
+  <div class="spiral-header">
+    <div>
+      <div class="section-label">01 / Collection</div>
+      <h2 class="section-title">唱片墙</h2>
+    </div>
+    <div class="spiral-view-toggle">
+      <button class="active" data-view="spiral">Spiral</button>
+      <button data-view="list">List</button>
+    </div>
+  </div>
+
+  <div class="spiral-container" id="spiralContainer">
+    <div class="spiral-core" id="spiralCore"></div>
+    <div class="spiral-float-tag">♪ Now Playing</div>
+    <div class="spiral-float-tag">★ Favorites</div>
+    <div class="spiral-float-tag">✦ Discover</div>
+    <div class="spiral-float-tag">♫ On Repeat</div>
+    <div class="spiral-float-tag">◎ Collection</div>
+    <div class="spiral-track" id="spiralTrack"></div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section" id="about">
+  <div class="section-label">02 / Profile</div>
+  <div class="about-content">
+    <div class="about-visual">
+      <div class="about-clock">
+        <div class="about-clock-ring"></div>
+        <div class="about-clock-ring"></div>
+        <div class="about-clock-ring"></div>
+        <div class="about-clock-center">我</div>
+        <div class="about-clock-dot"></div>
+      </div>
+    </div>
+    <div>
+      <ul class="about-info-list">
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Location</div>
+            <div class="about-info-value">广东 · 佛山</div>
+          </div>
+        </li>
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Occupation</div>
+            <div class="about-info-value">独立开发者</div>
+          </div>
+        </li>
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Now Playing</div>
+            <div class="about-info-value">曾经是情侣 — 梁博</div>
+          </div>
+        </li>
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Reading</div>
+            <div class="about-info-value">《线性代数与数据学习》— 吉尔伯特·斯特朗</div>
+          </div>
+        </li>
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Building</div>
+            <div class="about-info-value">Personal Space</div>
+          </div>
+        </li>
+        <li class="about-info-item">
+          <div class="about-info-dot"></div>
+          <div>
+            <div class="about-info-label">Motto</div>
+            <div class="about-info-value">记录生活，沉淀思考</div>
+          </div>
+        </li>
+      </ul>
+      <div class="about-tags">
+        <span class="about-tag large">电影</span>
+        <span class="about-tag">徒步</span>
+        <span class="about-tag">旅行</span>
+        <span class="about-tag small">前端开发</span>
+        <span class="about-tag small">摄影</span>
+        <span class="about-tag small">咖啡</span>
+        <span class="about-tag small">设计</span>
+        <span class="about-tag small">读书</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog -->
+<section class="section" id="blog">
+  <div class="section-label">03 / Journal</div>
+  <h2 class="section-title">Writing</h2>
+  <div class="blog-list">
+    <article class="blog-card reveal">
+      <div class="blog-cover">
+        <span class="blog-number">01</span>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%231a1a2e'/%3E%3Cstop offset='100%25' style='stop-color:%2316213e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='600'/%3E%3Ccircle cx='600' cy='150' r='80' fill='%23e94560' opacity='0.3'/%3E%3Ccircle cx='200' cy='450' r='120' fill='%230f3460' opacity='0.4'/%3E%3Cpath d='M0 500 Q200 400 400 480 T800 450 L800 600 L0 600Z' fill='%230f3460' opacity='0.3'/%3E%3C/svg%3E" alt="不问归期不提旧人" loading="lazy">
+      </div>
+      <div class="blog-content">
+        <span class="blog-tag">随笔</span>
+        <h3 class="blog-title">不问归期，不提旧人</h3>
+        <p class="blog-excerpt">有些路，走了就不要回头。有些人，散了就不要再问。我们在时光里渐行渐远，却也在各自的轨道上安静地生长着。</p>
+        <div class="blog-date">2026.06.22</div>
+        <a href="#" class="blog-read-btn">阅读全文</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="quote-section">
+  <div class="quote-slider" id="quoteSlider">
+    <div class="quote-item active">
+      <p class="quote-text">时间不是用来规划的，是用来经历的。</p>
+    </div>
+    <div class="quote-item">
+      <p class="quote-text">孤独不是一种状态，而是一种选择。</p>
+    </div>
+    <div class="quote-item">
+      <p class="quote-text">城市很大，大到可以装下所有的梦想和失落。</p>
+    </div>
+    <div class="quote-item">
+      <p class="quote-text">成长就是不断地告别，又不断地遇见。</p>
+    </div>
+  </div>
+  <div class="quote-dots" id="quoteDots">
+    <span class="quote-dot active" data-index="0"></span>
+    <span class="quote-dot" data-index="1"></span>
+    <span class="quote-dot" data-index="2"></span>
+    <span class="quote-dot" data-index="3"></span>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section">
+  <div class="section-label">04 / Journey</div>
+  <h2 class="section-title">Timeline</h2>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2021</div>
+      <div class="timeline-title">学会吉他</div>
+      <div class="timeline-desc">从第一根弦开始，慢慢学会了用音乐表达自己。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2023 · 10</div>
+      <div class="timeline-title">第一次独自旅行</div>
+      <div class="timeline-desc">攀登哈巴雪山，在海拔 5396 米的山顶看到了日出。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2025</div>
+      <div class="timeline-title">开始收藏黑胶</div>
+      <div class="timeline-desc">在 analog 的声音里，找回了对音乐最原始的感动。</div>
+    </div>
+    <div class="timeline-item now reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">NOW</div>
+      <div class="timeline-title">现在进行时</div>
+      <div class="timeline-desc">写代码、听音乐、读书、走路。在日常里寻找不日常。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="contact">
+  <div class="footer-top">
+    <div class="footer-cta">
+      <h3>Let's Talk</h3>
+      <p>有想法、有合作、或者只是想打个招呼——都可以。</p>
+      <a href="mailto:hello@lispace.xyz" class="footer-email">hello@lispace.xyz</a>
+    </div>
+    <div>
+      <ul class="footer-social">
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">微信公众号</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Mike Li. All rights reserved.</span>
+    <span>Made with <span class="footer-cursor"></span></span>
+  </div>
+</footer>
+
+<!-- Mini Player -->
+<div class="mini-player" id="miniPlayer">
+  <div class="mini-player-cover">
+    <img id="miniPlayerCover" src="" alt="">
+  </div>
+  <div class="mini-player-info">
+    <div class="mini-player-title" id="miniPlayerTitle">—</div>
+    <div class="mini-player-artist" id="miniPlayerArtist">—</div>
+  </div>
+  <div class="mini-player-controls">
+    <button class="mini-player-btn" id="miniPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="mini-player-btn" id="miniPlayPause" aria-label="Play/Pause">
+      <svg id="miniPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="mini-player-btn" id="miniNext" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Player Modal -->
+<div class="player-modal" id="playerModal">
+  <button class="player-modal-close" id="playerClose" aria-label="Close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="player-modal-content">
+    <div class="player-modal-cover">
+      <img id="playerCover" src="" alt="">
+    </div>
+    <div class="player-modal-title" id="playerTitle">—</div>
+    <div class="player-modal-artist" id="playerArtist">—</div>
+    <div class="player-modal-controls">
+      <button class="player-modal-btn" id="playerPrev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      </button>
+      <button class="player-modal-btn play" id="playerPlayPause" aria-label="Play/Pause">
+        <svg id="playerPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="player-modal-btn" id="playerNext" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      </button>
+    </div>
+    <div class="player-modal-progress">
+      <span id="playerCurrentTime">0:00</span>
+      <div class="player-modal-progress-bar" id="playerProgressBar">
+        <div class="player-modal-progress-fill" id="playerProgressFill"></div>
+      </div>
+      <span id="playerDuration">0:30</span>
+    </div>
+    <div class="player-modal-track-label">Track List</div>
+    <div class="track-list" id="trackList"></div>
+  </div>
+</div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M18 15l-6-6-6 6"/>
+  </svg>
+</button>
+
+<script src="albums.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

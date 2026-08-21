@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="creative-medium" content="interactive-prototype" />
+  <title>MIKE LI — 记录生活，沉淀思考</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+</head>
+<body>
+  <!-- 页面加载动画 -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-text">
+      <span>M</span><span>I</span><span>K</span><span>E</span>
+      <span class="loader-space">&nbsp;</span>
+      <span>L</span><span>I</span>
+    </div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill" id="loaderBarFill"></div>
+    </div>
+    <div class="loader-num mono" id="loaderNum">0%</div>
+  </div>
+
+  <!-- 自定义光标 -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- 滚动进度条 -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- 细网格背景纹理 -->
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <!-- 顶部导航 -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#top" class="nav-logo">MIKE&nbsp;LI</a>
+      <nav class="nav-links">
+        <a href="#top" class="nav-link active" data-cursor="link">首页</a>
+        <a href="#albums" class="nav-link" data-cursor="link">专辑</a>
+        <a href="#about" class="nav-link" data-cursor="link">关于</a>
+        <a href="#blog" class="nav-link" data-cursor="link">博客</a>
+        <a href="#timeline" class="nav-link" data-cursor="link">经历</a>
+        <a href="#contact" class="nav-link" data-cursor="link">联系</a>
+      </nav>
+      <button class="nav-menu-btn" id="menuBtn" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#top" class="mobile-link">首页</a>
+    <a href="#albums" class="mobile-link">专辑</a>
+    <a href="#about" class="mobile-link">关于</a>
+    <a href="#blog" class="mobile-link">博客</a>
+    <a href="#timeline" class="mobile-link">经历</a>
+    <a href="#contact" class="mobile-link">联系</a>
+  </div>
+
+  <main>
+    <!-- HERO 首屏 -->
+    <section class="hero" id="top">
+      <!-- 粒子背景 -->
+      <canvas class="hero-particles" id="heroParticles" aria-hidden="true"></canvas>
+      <!-- 音频可视化波纹 -->
+      <canvas class="hero-visualizer" id="heroVisualizer" aria-hidden="true"></canvas>
+
+      <div class="hero-inner">
+        <!-- 左上角标签 -->
+        <div class="hero-tag mono">
+          <span class="tag-dot"></span>
+          <span class="tag-text" id="tagText"></span>
+          <span class="tag-cursor"></span>
+        </div>
+
+        <!-- 大标题（错位排版） -->
+        <h1 class="hero-title">
+          <span class="title-row title-row-top">
+            <span class="title-letter" style="--delay:0.3s">M</span>
+            <span class="title-letter" style="--delay:0.4s">I</span>
+            <span class="title-letter" style="--delay:0.5s">K</span>
+            <span class="title-letter" style="--delay:0.6s">E</span>
+          </span>
+          <span class="title-row title-row-bottom">
+            <span class="title-letter title-italic" style="--delay:0.8s">L</span>
+            <span class="title-letter title-italic" style="--delay:0.9s">I</span>
+            <span class="title-period" style="--delay:1.05s">.</span>
+          </span>
+        </h1>
+
+        <!-- 左下角标签 -->
+        <div class="hero-bottom-left">
+          <p class="hero-slogan">记录生活，沉淀思考</p>
+        </div>
+
+        <!-- 右下角：时间 + 滚动提示 -->
+        <div class="hero-bottom-right">
+          <div class="hero-time mono" id="heroTime">--:--:--</div>
+          <div class="scroll-hint">
+            <span class="mono">SCROLL</span>
+            <div class="scroll-arrow">
+              <svg viewBox="0 0 24 24" width="16" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="12" y1="2" x2="12" y2="20" />
+                <polyline points="6 14 12 20 18 14" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部渐变过渡 -->
+      <div class="hero-gradient-bottom"></div>
+    </section>
+
+    <!-- 专辑墙板块 -->
+    <section class="albums-section" id="albums">
+      <div class="section-head reveal">
+        <span class="section-num mono">01 / COLLECTION</span>
+        <h2 class="section-title">螺旋唱片墙</h2>
+        <p class="section-desc">十八张陪我走过不同时刻的专辑。点击试听，拖拽旋转。</p>
+      </div>
+
+      <div class="spiral-wrapper" id="spiralWrapper">
+        <!-- 中心发光核心 -->
+        <div class="spiral-core" id="spiralCore"></div>
+
+        <!-- 漂浮文字标签 -->
+        <div class="floating-label label-1">NOW&nbsp;PLAYING</div>
+        <div class="floating-label label-2">FAVORITES</div>
+        <div class="floating-label label-3">DISCOVER</div>
+        <div class="floating-label label-4 mono">∞ 18 TRACKS</div>
+        <div class="floating-label label-5">VINYL</div>
+
+        <div class="spiral-container" id="spiralContainer">
+          <!-- 螺旋卡片由 JS 生成 -->
+        </div>
+
+        <!-- 悬停信息浮层 -->
+        <div class="album-tooltip" id="albumTooltip">
+          <div class="tooltip-album-name" id="tooltipName">—</div>
+          <div class="tooltip-artist" id="tooltipArtist">—</div>
+          <div class="tooltip-genre mono" id="tooltipGenre">—</div>
+        </div>
+
+        <!-- 视图切换 -->
+        <div class="view-toggle">
+          <button class="view-btn active" data-view="spiral" data-cursor="link">SPIRAL</button>
+          <span class="view-sep">/</span>
+          <button class="view-btn" data-view="list" data-cursor="link">LIST</button>
+        </div>
+      </div>
+
+      <!-- 播放浮层（点击专辑后出现） -->
+      <div class="play-overlay" id="playOverlay">
+        <button class="play-close" id="playClose" aria-label="关闭" data-cursor="link">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="4" y1="4" x2="20" y2="20" />
+            <line x1="20" y1="4" x2="4" y2="20" />
+          </svg>
+        </button>
+        <div class="play-content">
+          <div class="play-cover-wrap">
+            <div class="play-cover" id="playCover">
+              <img id="playCoverImg" src="" alt="" />
+            </div>
+            <canvas class="play-visualizer" id="playVisualizer" aria-hidden="true"></canvas>
+          </div>
+          <div class="play-info">
+            <div class="play-genre mono" id="playGenre">—</div>
+            <h3 class="play-album-name" id="playAlbumName">—</h3>
+            <div class="play-artist" id="playArtist">—</div>
+
+            <div class="play-progress">
+              <span class="mono" id="playCurrent">0:00</span>
+              <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-handle" id="progressHandle"></div>
+              </div>
+              <span class="mono" id="playDuration">0:30</span>
+            </div>
+
+            <div class="play-controls">
+              <button class="ctrl-btn" id="prevBtn" aria-label="上一首" data-cursor="link">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <polygon points="19,20 9,12 19,4" />
+                  <rect x="5" y="4" width="2" height="16" />
+                </svg>
+              </button>
+              <button class="ctrl-btn ctrl-main" id="playPauseBtn" aria-label="播放/暂停" data-cursor="link">
+                <svg class="icon-play" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <polygon points="8,5 20,12 8,19" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style="display:none">
+                  <rect x="6" y="5" width="4" height="14" />
+                  <rect x="14" y="5" width="4" height="14" />
+                </svg>
+              </button>
+              <button class="ctrl-btn" id="nextBtn" aria-label="下一首" data-cursor="link">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <polygon points="5,4 15,12 5,20" />
+                  <rect x="17" y="4" width="2" height="16" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="play-volume">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="4,9 9,9 14,5 14,19 9,15 4,15" fill="currentColor" stroke="none" />
+                <path d="M17 8a5 5 0 0 1 0 8" />
+                <path d="M20 5a9 9 0 0 1 0 14" />
+              </svg>
+              <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于我 — 数据化个人档案 -->
+    <section class="about-section" id="about">
+      <div class="section-head reveal">
+        <span class="section-num mono">02 / PROFILE</span>
+      </div>
+
+      <div class="about-grid">
+        <!-- 左侧：大号时钟式"我" -->
+        <div class="about-avatar reveal">
+          <div class="avatar-clock">
+            <div class="clock-ring"></div>
+            <div class="clock-ring clock-ring-2"></div>
+            <div class="clock-character">我</div>
+            <div class="clock-dot clock-dot-1"></div>
+            <div class="clock-dot clock-dot-2"></div>
+            <div class="clock-dot clock-dot-3"></div>
+            <div class="clock-dot clock-dot-4"></div>
+          </div>
+          <div class="avatar-status">
+            <span class="status-dot"></span>
+            <span class="mono status-text">CURRENTLY IN&nbsp;SHANGHAI</span>
+          </div>
+        </div>
+
+        <!-- 右侧：信息行 -->
+        <div class="about-info">
+          <div class="info-line reveal" style="--delay:0s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">LOCATION</span>
+            <span class="info-value">广东 · 佛山</span>
+          </div>
+          <div class="info-line reveal" style="--delay:0.05s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">OCCUPATION</span>
+            <span class="info-value">独立开发者</span>
+          </div>
+          <div class="info-line reveal" style="--delay:0.1s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">NOW PLAYING</span>
+            <span class="info-value">曾经是情侣 by 梁博</span>
+          </div>
+          <div class="info-line reveal" style="--delay:0.15s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">READING</span>
+            <span class="info-value">《线性代数与数据学习》— 吉尔伯特·斯特朗</span>
+          </div>
+          <div class="info-line reveal" style="--delay:0.2s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">WORKING ON</span>
+            <span class="info-value">Personal Space</span>
+          </div>
+          <div class="info-line reveal" style="--delay:0.25s">
+            <span class="info-dot"></span>
+            <span class="info-label mono">MOTTO</span>
+            <span class="info-value quote-line">认真生活，本身就是一种创作</span>
+          </div>
+
+          <!-- 标签云 -->
+          <div class="tag-cloud reveal">
+            <span class="tag" style="font-size: 0.875rem; font-weight: 400; padding: 6px 14px" data-cursor="link">前端开发</span>
+            <span class="tag" style="font-size: 0.875rem; padding: 6px 14px" data-cursor="link">摄影</span>
+            <span class="tag tag-md" data-cursor="link">骑行</span>
+            <span class="tag" style="font-size: 0.875rem; padding: 6px 14px" data-cursor="link">咖啡</span>
+            <span class="tag tag-lg" data-cursor="link">黑胶</span>
+            <span class="tag" style="font-size: 1rem; font-weight: 500" data-cursor="link">电影</span>
+            <span class="tag" style="font-size: 0.875rem; padding: 6px 14px" data-cursor="link">设计</span>
+            <span class="tag tag-md" data-cursor="link">写作</span>
+            <span class="tag" style="font-size: 1rem; font-weight: 500" data-cursor="link">徒步</span>
+            <span class="tag tag-lg" data-cursor="link">电子音乐</span>
+            <span class="tag" style="font-size: 0.875rem; padding: 6px 14px" data-cursor="link">读书</span>
+            <span class="tag" style="font-size: 1rem; font-weight: 500" data-cursor="link">旅行</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 博客文章 — 杂志封面式 -->
+    <section class="blog-section" id="blog">
+      <div class="section-head reveal">
+        <span class="section-num mono">03 / WRITING</span>
+        <h2 class="section-title">最新文章</h2>
+        <p class="section-desc">写字是一种整理自己的方式。</p>
+      </div>
+
+      <div class="blog-list">
+        <article class="blog-card reveal" data-cursor="link">
+          <div class="blog-cover">
+            <img src="/spark/app/app_17cg6xpg144/runtime/api/v1/storage/object/bucket_aadkq2zue2yfg_static/static%2Faadkq6gotjabs_ve_miaoda" alt="城市清晨" loading="lazy" />
+            <div class="blog-cover-overlay"></div>
+            <span class="blog-num mono">01</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <span class="blog-cat">城市</span>
+              <span class="blog-date mono">2026 · 06 · 22</span>
+            </div>
+            <h3 class="blog-title">不问归期，不提旧人</h3>
+            <p class="blog-excerpt">
+              跨山越海皆陌路，余生岁岁又年年。世间风月千万种，再无一处可相逢。
+              过往温柔与欢喜，尽数封存在昨日。往后前路各自独行，不问归期，也莫提旧人。
+            </p>
+            <a href="#" class="blog-more" data-cursor="link">
+              <span>阅读全文</span>
+              <span class="more-arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+
+      </div>
+    </section>
+
+    <!-- 引言金句 — 沉浸式轮播 -->
+    <section class="quote-section" id="quote">
+      <div class="quote-container">
+        <div class="quote-line-deco"></div>
+        <div class="quote-slider" id="quoteSlider">
+          <div class="quote-item active">
+            <p>生活不是等待风暴过去，<br/>而是学会在雨中翩翩起舞。</p>
+          </div>
+          <div class="quote-item">
+            <p>我们都在阴沟里，<br/>但仍有人仰望星空。</p>
+          </div>
+          <div class="quote-item">
+            <p>城市是几百万个人<br/>一起孤独生活的地方。</p>
+          </div>
+          <div class="quote-item">
+            <p>时间从来不回答，<br/>但它解决了所有问题。</p>
+          </div>
+        </div>
+        <div class="quote-dots" id="quoteDots">
+          <span class="quote-dot active"></span>
+          <span class="quote-dot"></span>
+          <span class="quote-dot"></span>
+          <span class="quote-dot"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 时间线/经历 -->
+    <section class="timeline-section" id="timeline">
+      <div class="section-head reveal">
+        <span class="section-num mono">04 / JOURNEY</span>
+        <h2 class="section-title">时间线</h2>
+        <p class="section-desc">一些值得被记住的节点。</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item reveal" data-side="left">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-year mono">2021</div>
+            <h4 class="timeline-title">学会吉他</h4>
+            <p class="timeline-desc">
+              从第一根弦开始，到能完整弹完一首歌。音乐从聆听变成了表达。
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal" data-side="right">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-year mono">2023·10</div>
+            <h4 class="timeline-title">第一次独自旅行，攀登哈巴雪山</h4>
+            <p class="timeline-desc">
+              背着包去了川西。一个人走在雪山脚下，才明白孤独也可以是自由的别名。
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal" data-side="left">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-year mono">2025</div>
+            <h4 class="timeline-title">开始收藏黑胶</h4>
+            <p class="timeline-desc">
+              第一台唱机，第一张唱片。在数字时代找回物理的仪式感。
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal" data-side="right">
+          <div class="timeline-node timeline-now">
+            <span class="pulse-ring"></span>
+          </div>
+          <div class="timeline-card">
+            <div class="timeline-year mono">NOW</div>
+            <h4 class="timeline-title">现在进行时</h4>
+            <p class="timeline-desc">
+              继续写、继续听、继续走。故事还在继续。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 / 联系卡片 -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-card reveal">
+        <div class="footer-left">
+          <div class="footer-label mono">GET IN TOUCH</div>
+          <a href="mailto:hello@mike.li" class="footer-email" data-cursor="link">
+            hello@mike.li
+          </a>
+          <div class="footer-big-text">
+            LET'S<br/>TALK.
+          </div>
+        </div>
+        <div class="footer-right">
+          <div class="footer-socials">
+            <a href="#" class="social-item" data-cursor="link">
+              <span class="social-label mono">01</span>
+              <span class="social-name">GitHub</span>
+              <span class="social-arrow">↗</span>
+            </a>
+            <a href="#" class="social-item" data-cursor="link">
+              <span class="social-label mono">02</span>
+              <span class="social-name">Twitter</span>
+              <span class="social-arrow">↗</span>
+            </a>
+            <a href="#" class="social-item" data-cursor="link">
+              <span class="social-label mono">03</span>
+              <span class="social-name">Instagram</span>
+              <span class="social-arrow">↗</span>
+            </a>
+            <a href="#" class="social-item" data-cursor="link">
+              <span class="social-label mono">04</span>
+              <span class="social-name">RSS</span>
+              <span class="social-arrow">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-copy mono">© 2026 MIKE LI</span>
+        <span class="footer-cursor">_</span>
+        <span class="footer-copy mono">ALL RIGHTS RESERVED</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 回到顶部 -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部" data-cursor="link">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="12" y1="20" x2="12" y2="6" />
+      <polyline points="6 12 12 6 18 12" />
+    </svg>
+  </button>
+
+  <!-- 底部迷你播放条 -->
+  <div class="mini-player" id="miniPlayer">
+    <div class="mini-player-inner">
+      <div class="mini-cover" id="miniCover">
+        <img id="miniCoverImg" src="" alt="" />
+      </div>
+      <div class="mini-info">
+        <div class="mini-name" id="miniName">未在播放</div>
+        <div class="mini-artist" id="miniArtist">—</div>
+      </div>
+      <div class="mini-controls">
+        <button class="mini-btn" id="miniPrev" aria-label="上一首" data-cursor="link">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <polygon points="19,20 9,12 19,4" />
+            <rect x="5" y="4" width="2" height="16" />
+          </svg>
+        </button>
+        <button class="mini-btn mini-main" id="miniPlayPause" aria-label="播放/暂停" data-cursor="link">
+          <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <polygon points="8,5 20,12 8,19" />
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:none">
+            <rect x="6" y="5" width="4" height="14" />
+            <rect x="14" y="5" width="4" height="14" />
+          </svg>
+        </button>
+        <button class="mini-btn" id="miniNext" aria-label="下一首" data-cursor="link">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <polygon points="5,4 15,12 5,20" />
+            <rect x="17" y="4" width="2" height="16" />
+          </svg>
+        </button>
+      </div>
+      <div class="mini-progress" id="miniProgress">
+        <div class="mini-progress-fill" id="miniProgressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

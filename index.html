@@ -514,4 +514,124 @@
 
   <script src="script.js"></script>
 </body>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mike Li · 个人主页</title>
+    <meta
+      name="description"
+      content="Mike Li 的个人主页：记录生活、思考与创作。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Prevent anchor auto-scroll before page loads
+      if (window.location.hash) {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+      window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="loader" id="loader">
+      <div class="loader-content">
+        <div class="loader-logo">
+          <svg id="loaderSvg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 20 L20 80 L45 80 L45 45 L70 45 L70 20" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M35 20 L35 60" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="loader-text">LOAD MIKE</div>
+      </div>
+    </div>
+    
+    <div class="cursor-glow" id="cursorGlow"></div>
+    
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="#top">MIKE LI</a>
+        <button class="menu-btn" id="menuBtn" aria-label="打开菜单">MENU</button>
+        <nav id="nav" class="nav">
+          <a href="#blog">博客</a>
+          <a href="#contact">联系</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero container">
+        <div class="hero-bg-shape shape-1" data-parallax="0.03"></div>
+        <div class="hero-bg-shape shape-2" data-parallax="0.05"></div>
+        <div class="hero-content">
+          <p class="hero-label">个人主页 & 生活博客</p>
+          <div class="text-scramble-container">
+            <h1 class="hero-title text"></h1>
+          </div>
+          <p class="hero-desc">
+            在这里，我记录日常、分享思考，<br>
+            也沉淀做事的方法。简洁、克制、专注内容。
+          </p>
+        </div>
+      </section>
+
+      <section id="blog" class="section-split">
+        <div class="container split-container">
+          <div class="split-left">
+            <span class="section-number">01</span>
+          </div>
+          <div class="split-right">
+            <div class="posts-list" id="postList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-photo">
+        <div class="container photo-container">
+          <img 
+            src="b5bbbe9042c978b8bcdfa31c82b4c90c.jpg" 
+            alt="舞台剪影" 
+            class="hero-photo"
+          />
+        </div>
+      </section>
+
+      <section class="section-highlight">
+        <div class="container">
+          <div class="highlight-content">
+            <blockquote>
+              <p>
+                "生活不是等待风暴过去，而是学会在雨中翩翩起舞。"
+              </p>
+              <cite>— 未知</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="container footer-wrap">
+        <div class="footer-left">
+          <h3>MIKE LI</h3>
+          <p>记录生活，沉淀思考</p>
+        </div>
+        <div class="footer-right">
+          <p class="copyright">© <span id="year"></span> Mike Li. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
 </html>
